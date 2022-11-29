@@ -1,0 +1,56 @@
+pipeline {
+    environment {
+        repoName = "inventory"
+    }
+    agent any   
+    stages {                
+        stage('Maven Application Build') {
+            when {
+                branch 'AuthImpl'
+            }
+            steps {
+                cleanWs()
+                checkout scm
+                echo 'Commencing Maven build'
+                withMaven(maven: '3.6.0', mavenLocalRepo: '/home/jenkins/.m2/development', publisherStrategy: 'EXPLICIT'){
+                    sh 'mvn clean install -DskipTests -P dev'
+                }
+                echo 'Maven Build successful'
+            }
+        }
+        stage('Docker Build') {
+            when {
+                branch 'AuthImpl'
+            }
+            steps {
+                echo 'Building dockerfile..'
+                script {
+                    dockerImage = docker.build("${REPO_NAME}/${repoName}")
+                }
+                echo 'Docker Build successful'
+            }
+        }
+        stage('Docker Push') {
+            when {
+                branch 'AuthImpl'
+            }
+            steps {
+                script {
+                    dockerImage.push("qnx-dev")
+                    dockerImage.push("dev-build-${BUILD_NUMBER}")
+                }
+                echo 'Docker image pushed'
+            }
+        }
+
+        stage('Cleaning Workspace') {
+            when {
+                branch 'AuthImpl'
+            }
+            steps {
+                echo 'Cleaning Workspace'
+                sh 'docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep "${REPO_NAME}/${repoName}:qnx-dev\\|${REPO_NAME}/${repoName}:dev-build")'
+            }
+        }
+    }
+}

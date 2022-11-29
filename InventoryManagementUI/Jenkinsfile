@@ -1,0 +1,54 @@
+pipeline {
+    environment {
+        repoName = "inventory-ui"
+    }
+    agent any   
+    stages {                
+        stage('Maven Application Build') {
+            when {
+                branch 'development'
+            }
+            steps {
+                cleanWs()
+                checkout scm
+                echo 'Building application'
+                sh 'npm cache clean --force'
+                sh 'npm install'
+                sh 'node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --prod --aot --build-optimizer --vendor-chunk=true'
+            }
+        }
+        stage('Docker Build') {
+when {
+branch 'development'
+}
+steps {
+echo 'Building dockerfile..'
+script {
+dockerImage = docker.build("${REPO_NAME}/${repoName}")
+}
+echo 'Docker Build successful'
+}
+}
+stage('Docker Push') {
+when {
+branch 'development'
+}
+steps {
+script {
+dockerImage.push("qnx-dev")
+dockerImage.push("dev-build-${BUILD_NUMBER}")
+}
+echo 'Docker image pushed'
+}
+}
+stage('Cleaning Workspace') {
+when {
+branch 'development'
+}
+steps {
+echo 'Cleaning Workspace'
+sh 'docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep "${REPO_NAME}/${repoName}:qnx-dev\\|${REPO_NAME}/${repoName}:dev-build")'
+}
+}
+}
+}

@@ -1,0 +1,76 @@
+{ 
+    "title": "Device",
+    "entity": "Device",
+    "api": {
+      "url": "http://www.angular.at/api/Devices"
+    },
+    "filter": [
+      "name"
+    ],
+    "fields": [
+      {
+        "name": "id",
+        "label": "Id",
+        "isId": true,
+        "readonly": true,
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "label": "Name"
+      },
+      {
+        "name": "maker",
+        "type": "string",
+        "label": "Maker"
+      },
+      {
+        "name": "model",
+        "type": "string",
+        "label": "Model"
+      },
+      {
+        "name": "IPAddress",
+        "type": "string",
+        "label": "IP Address"
+      },
+      {
+        "name": "deviceType",
+        "type": "string",
+        "label": "Device Type"
+      },{
+	"name": "serialNo",
+        "type": "string",
+        "label": "Serial No"
+	},{
+	"name": "OS",
+        "type": "string",
+        "label": "OS"
+	},{
+	"name": "state",
+        "type": "string",
+        "label": "State"
+	},{
+        "name": "status",
+            "type": "string",
+            "label": "Status"
+        },{
+	"name": "createdBy",
+        "type": "string",
+        "label": "Created By"
+	},{
+	"name": "createdDate",
+        "type": "Date",
+        "label": "Created On"
+	},{
+	"name": "lastModifiedBy",
+        "type": "string",
+        "label": "Modified By"
+	},{
+	      "name": "lastModifiedDate",
+        "type": "Date",
+        "label": "Modified On"
+	}
+    ]
+}

@@ -1,0 +1,59 @@
+
+<nb-card>
+  <nb-card-header>Client Detail</nb-card-header>
+  <nb-card-body>
+    <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+    <form *ngIf="client" #editForm="ngForm" (ngSubmit)="save()">
+    
+      <input type="hidden" id="id" name="id" [(ngModel)]="client.id">
+    
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input [(ngModel)]="client.name" id="name" name="name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="engagement">Engagement</label>
+        <input [(ngModel)]="client.engagement" id="engagement" name="engagement" class="form-control">
+      </div>
+    
+      <nb-card>
+        <nb-card-header>contractStartDate</nb-card-header>
+        <nb-card-body>
+          <input nbInput
+                id="contractStartDate" name="contractStartDate" class="form-control"
+                 placeholder="Form Picker"
+                 [(ngModel)]="client.contractStartDate"
+                 [nbDatepicker]="contractStartDate">
+          <nb-datepicker #contractStartDate></nb-datepicker>
+        </nb-card-body>
+      </nb-card>
+      <!-- <div class="form-group">
+        <label for="startDate">Start Date</label>
+        <input [(ngModel)]="client.startDate" id="startDate" name="startDate" class="form-control">
+      </div> -->
+    
+      <nb-card>
+        <nb-card-header>contractEndDate</nb-card-header>
+        <nb-card-body>
+          <input nbInput
+                id="contractEndDate" name="contractEndDate" class="form-control"
+                 placeholder="Form Picker"
+                 [(ngModel)]="client.contractEndDate"
+                 [nbDatepicker]="contractEndDate">
+          <nb-datepicker #contractEndDate></nb-datepicker>
+        </nb-card-body>
+      </nb-card>
+      <div class="form-group">
+        <label for="email">email</label>
+        <input [(ngModel)]="client.email" id="email" name="email" class="form-control">
+      </div>
+      <!-- <div class="form-group">
+        <label for="stopDate">Stop Date</label>
+        <input [(ngModel)]="client.stopDate" id="stopDate" name="stopDate" class="form-control">
+      </div>
+     -->
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+  </nb-card-body>
+</nb-card>

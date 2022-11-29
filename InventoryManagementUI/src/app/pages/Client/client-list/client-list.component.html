@@ -1,0 +1,73 @@
+
+<nb-card>
+  <nb-card-header>
+    Client List
+  </nb-card-header>
+
+  <nb-card-body>
+    <form #f="ngForm">      
+      <input (keyup)="search()" [(ngModel)]="filter.name" id="name" name="name" class="form-control">
+      <a [routerLink]="['../clients', 'new' ]" class="btn btn-default">New</a>
+    </form>
+
+    <div class="card" *ngIf="clientList.length > 0">
+      <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+      <div>
+        <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
+        <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
+          <thead>
+            <tr>
+              <th class="border-top-0" scope="col">name</th>
+              <th class="border-top-0" scope="col">Engagement</th>
+              <th class="border-top-0" scope="col">Contract Start </th>
+              <th class="border-top-0" scope="col">Contract Stop</th>
+              <th class="border-top-0" scope="col">email</th>
+              <th class="border-top-0" scope="col" style="width:120px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of clientList" [class.active]="item === selectedClient">
+              <td>{{item.name}}</td>
+              <td>{{item.engagement}}</td>
+              <td>{{item.contractStartDate | date:'dd-MM-yyyy'}}</td>
+              <td>{{item.contractEndDate | date:'dd-MM-yyyy'}}</td>
+              <td>{{item.email}}</td>
+              <td style="white-space: nowrap">
+                <a [routerLink]="['../clients', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
+                <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="viewType!=='listview'">
+          <div class="row">
+            <div *ngFor="let item of clientList" class="col-xxxl-6 col-xxl-5 col-lg-3 col-md-3">
+              <nb-card>
+                <nb-card-header> {{item.name}} 
+                  
+                </nb-card-header>
+               
+                <nb-card-body>             
+               <div> <span class="lablesinner">engagement : </span> {{ item.engagement }}        </div>
+               <div> <span class="lablesinner">contractStartDate :</span> {{item.contractStartDate | date:'dd-MM-yyyy'}}</div>
+               <div> <span class="lablesinner">contractEndDate :       </span> {{item.contractEndDate | date:'dd-MM-yyyy'}}        </div>     
+               <div> <span class="lablesinner">email :      </span> {{ item.email }}       </div>    
+     
+                
+               <a [routerLink]="['../clients', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
+                <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+  
+                  </nb-card-body>
+                  </nb-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   </nb-card-body>
+
+</nb-card>
+

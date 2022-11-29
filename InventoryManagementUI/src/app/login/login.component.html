@@ -1,0 +1,87 @@
+<nb-card>
+  <nb-card-header><h1 id="title" class="title">Qyrus Farm Login</h1></nb-card-header>
+  <nb-card-body>
+
+    <p class="sub-title">Hello! Log in with your username.</p>
+
+    <nb-alert outline="danger" *ngIf="errors.length>0" role="alert">
+      <p class="alert-title"><b>Oh snap!</b></p>
+      <ul class="alert-message-list">
+        <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+      </ul>
+    </nb-alert>
+    
+    
+    
+    <form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+    
+      <div class="form-control-group">
+        <label class="label" for="input-name">name:</label>
+        <input nbInput
+               fullWidth
+               [(ngModel)]="user.userName"
+               #name="ngModel"
+               name="name"
+               id="input-name"          
+               placeholder="name"
+               fieldSize="large"
+               autofocus
+               [status]="name.dirty ? (name.invalid  ? 'danger' : 'success') : 'basic'"
+               [required]="true"
+               [attr.aria-invalid]="name.invalid && name.touched ? true : null">
+        <ng-container *ngIf="name.invalid && name.touched">
+          <p class="caption status-danger" *ngIf="name.errors?.required">
+            name is required!
+          </p>
+        </ng-container>
+      </div>
+    
+      <div class="form-control-group">
+        <span class="label-with-link">
+          <label class="label" for="input-password">Password:</label>
+        </span>
+        <input nbInput
+               fullWidth
+               [(ngModel)]="user.password"
+               #password="ngModel"
+               name="password"
+               type="password"
+               id="input-password"
+               placeholder="Password"
+               fieldSize="large"
+               [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : 'basic'"
+               [required]="true"
+               [minlength]="1"
+               [maxlength]="100"
+               [attr.aria-invalid]="password.invalid && password.touched ? true : null">
+        <ng-container *ngIf="password.invalid && password.touched ">
+          <p class="caption status-danger" *ngIf="password.errors?.required">
+            Password is required!
+          </p>
+          <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">
+            Password should contain
+            from {{ getConfigValue('forms.validation.password.minLength') }}
+            to {{ getConfigValue('forms.validation.password.maxLength') }}
+            characters
+          </p>
+        </ng-container>
+      </div>
+    
+      <button nbButton
+              fullWidth
+              status="primary"
+              size="large"
+              [disabled]="submitted || !form.valid"
+              [class.btn-pulse]="submitted">
+        Log In
+      </button>
+    </form>
+    
+    
+    
+    <section class="another-action" aria-label="Register">
+      Don't have an account? <a class="text-link" routerLink="../register">Register</a>
+    </section>
+    </nb-card-body>
+    </nb-card>
+

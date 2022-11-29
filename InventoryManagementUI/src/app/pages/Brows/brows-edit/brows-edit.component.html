@@ -1,0 +1,27 @@
+
+
+<nb-card>
+  <nb-card-header>Browser Detail</nb-card-header>
+  <nb-card-body>
+    <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+    <form *ngIf="brows" #editForm="ngForm" (ngSubmit)="save()">
+    
+      <input type="hidden" id="id" name="id" [(ngModel)]="brows.id">
+    
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input [(ngModel)]="brows.name" required id="name" name="name" class="form-control">
+      </div>
+    
+      <div class="form-group">
+        <label for="version">Version</label>
+        <input [(ngModel)]="brows.version" required id="version" name="version" class="form-control">
+      </div>
+    
+    
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+  </nb-card-body>
+</nb-card>
+

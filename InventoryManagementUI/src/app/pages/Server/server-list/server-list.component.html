@@ -1,0 +1,117 @@
+<nb-card>
+  <nb-card-header> Server List </nb-card-header>
+
+  <nb-card-body>
+    <form #f="ngForm">
+      <div class="row">
+      
+      <div class="form-group col-6 ">
+        <label for="name">Name:</label>
+        <input
+        (keyup)="search()" 
+          [(ngModel)]="filter.name"
+          id="name"
+          name="name"
+          class="form-control"
+        />
+      </div>
+      <a [routerLink]="['../servers', 'new']" class="btn btn-default">New</a>
+    </div>
+    </form>
+
+    <div *ngIf="feedback.message" class="alert alert-{{ feedback.type }}">
+      {{ feedback.message }}
+    </div>
+    <div class="table-responsive" *ngIf="serverList.length > 0">
+      <div>
+        <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
+        <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
+      </div>
+      <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
+        <thead>
+          <tr>
+            <!-- <th class="border-top-0" scope="col">Id</th> -->
+            <th class="border-top-0" scope="col">Name</th>
+            <th class="border-top-0" scope="col">Serial No</th>
+            <th class="border-top-0" scope="col">Instance Type</th>
+            <th class="border-top-0" scope="col">state</th>
+            <th class="border-top-0" scope="col">region</th>
+            <th class="border-top-0" scope="col">hostingType</th>
+            <th class="border-top-0" scope="col">ipaddress</th>
+            <th class="border-top-0" scope="col">os</th>
+            <!-- <th class="border-top-0" scope="col">Created By</th>
+            <th class="border-top-0" scope="col">Created On</th>
+            <th class="border-top-0" scope="col">Modified By</th>
+            <th class="border-top-0" scope="col">Modified On</th> -->
+            <th class="border-top-0" scope="col" style="width: 120px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of serverList">
+            <!-- <td>{{ item.id }}</td> -->
+            <td>{{ item.name }}</td>
+            <td>{{ item.serialNo }}</td>
+            <td>{{ item.instanceType }}</td>
+            <td>{{ item.state }}</td>
+            <td>{{ item.region }}</td>
+            <td>{{ item.hostingType }}</td>
+            <td>{{ item.ipAddress }}</td>
+            <td>{{ item.os }}</td>
+            <!-- <td>{{ item.createdBy }}</td>
+            <td>{{ item.createdDate }}</td>
+            <td>{{ item.lastModifiedBy }}</td>
+            <td>{{ item.lastModifiedDate }}</td> -->
+            <td style="white-space: nowrap">
+              <a
+                [routerLink]="['../servers', item.id]"
+                class="btn btn-secondary"
+                >Edit</a
+              >&nbsp;
+              <button (click)="deplucated(item)" class="btn btn-secondary">
+                Duplicate
+              </button>&nbsp;
+              <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="viewType!=='listview'">
+        <div class="row">
+          <div *ngFor="let item of serverList" class="col-xxxl-6 col-xxl-5 col-lg-3 col-md-3">
+            <nb-card>
+              <nb-card-header> {{item.name}} 
+                
+              </nb-card-header>
+             
+              <nb-card-body>             
+             <div> <span class="lablesinner">serialNo : </span> {{ item.serialNo }}        </div>
+             <div> <span class="lablesinner">instanceType :</span> {{ item.instanceType }} </div>
+             <div> <span class="lablesinner">state :       </span> {{ item.state }}        </div>     
+             <div> <span class="lablesinner">region :      </span> {{ item.region }}       </div>    
+             <div> <span class="lablesinner">hostingType : </span> {{ item.hostingType }} </div>
+             <div> <span class="lablesinner">ipAddress :   </span> {{ item.ipAddress }}    </div> 
+             <div> <span class="lablesinner">os :          </span> {{ item.os }}           </div>        
+              
+             <a
+                [routerLink]="['../servers', item.id]"
+                class="btn btn-secondary"
+                >Edit</a
+              >&nbsp;
+              <button (click)="deplucated(item)" class="btn btn-secondary">
+                Duplicate
+              </button>&nbsp;
+              <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                Delete
+              </button>
+             
+                </nb-card-body>
+                </nb-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

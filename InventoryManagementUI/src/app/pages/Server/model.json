@@ -1,0 +1,72 @@
+{ 
+    "title": "Server",
+    "entity": "Server",
+    "api": {
+      "url": "http://www.angular.at/api/Servers"
+    },
+    "filter": [
+      "name"
+    ],
+    "fields": [
+      {
+        "name": "id",
+        "label": "Id",
+        "isId": true,
+        "readonly": true,
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "label": "Name"
+      },
+      {
+        "name": "serialNo",
+        "type": "string",
+        "label": "Serial No"
+      },
+      {
+        "name": "instanceType",
+        "type": "string",
+        "label": "Instance Type"
+      },
+      {
+        "name": "state",
+        "type": "string",
+        "label": "state"
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "label": "region"
+      },{
+	"name": "hostingType",
+        "type": "string",
+        "label": "hostingType"
+	},{
+	"name": "ipaddress",
+        "type": "string",
+        "label": "ipaddress"
+	},{
+	"name": "os",
+        "type": "string",
+        "label": "os"
+	},{
+	"name": "createdBy",
+        "type": "string",
+        "label": "Created By"
+	},{
+	"name": "createdDate",
+        "type": "Date",
+        "label": "Created On"
+	},{
+	"name": "lastModifiedBy",
+        "type": "string",
+        "label": "Modified By"
+	},{
+	      "name": "lastModifiedDate",
+        "type": "Date",
+        "label": "Modified On"
+	}
+    ]
+}

@@ -1,0 +1,75 @@
+
+
+<nb-card>
+  <nb-card-header>
+    Browser List
+  </nb-card-header>
+
+  <nb-card-body>
+    <form #f="ngForm">
+      
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input [(ngModel)]="filter.name" id="name" name="name" class="form-control">
+      </div>
+      
+      <a [routerLink]="['../browses', 'new' ]" class="btn btn-default">New</a>
+    </form>
+    </nb-card-body>
+    </nb-card>
+   
+
+    <nb-card *ngIf="browsList.length > 0">
+      <nb-card-header>
+        <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+      </nb-card-header>
+    
+      <nb-card-body>
+        <div>
+          <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
+          <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
+        </div>
+        <div class="table-responsive">
+          <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
+            <thead>
+              <tr>
+                <th class="border-top-0" scope="col">Name</th>
+                <th class="border-top-0" scope="col">Version</th>
+                <th class="border-top-0" scope="col" style="width:120px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of browsList" [class.active]="item === selectedBrows">
+                <td>{{item.name}}</td>
+                <td>{{item.version}}</td>
+                <td style="white-space: nowrap">
+                  <a [routerLink]="['../browses', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
+                  <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="viewType!=='listview'">
+            <div class="row">
+              <div *ngFor="let item of browsList" class="col-xxxl-6 col-xxl-5 col-lg-3 col-md-3">
+                <nb-card>
+                  <nb-card-header> {{item.name}}</nb-card-header>
+                 
+                  <nb-card-body>             
+                 <div> <span class="lablesinner">version : </span> {{ item.version }}        </div>
+                
+                 <a [routerLink]="['../browses', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
+                 <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+
+                    </nb-card-body>
+                    </nb-card>
+              </div>
+            </div>
+          </div>
+        </div>
+        </nb-card-body>
+        </nb-card>
+
+<div class="card" >
+ 
+</div>

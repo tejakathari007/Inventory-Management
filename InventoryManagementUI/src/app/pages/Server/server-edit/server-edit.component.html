@@ -1,0 +1,140 @@
+<nb-card>
+  <nb-card-header>Server Detail</nb-card-header>
+  <nb-card-body>
+    <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+    <form *ngIf="server" #editForm="ngForm" (ngSubmit)="save()">
+    <input type="hidden" id="id" name="id" [(ngModel)]="server.id">
+      <!-- <div class="form-group">
+        <label>Id</label>
+        {{server.id || 'n/a'}} 
+      </div> -->
+    
+      <div class="form-group">
+        <label for="name">Name </label>
+        <input [(ngModel)]="server.name" required  id="name" name="name" class="form-control">
+      </div>
+    
+      <div class="form-group">
+        <label for="serialNo">Serial No</label>
+        <input [(ngModel)]="server.serialNo" required id="serialNo" name="serialNo" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="ipaddress">ipAddress</label>
+        <input [(ngModel)]="server.ipAddress"  id="ipAddress" name="ipAddress" class="form-control">
+      </div>
+    
+      <div class="form-group">
+        <label for="os">OS</label>
+        <select [(ngModel)]="server.os" id="os" required name="os" class="form-control">
+          <option value>Select Option</option>
+          <option *ngFor="let item of getEnumData('ServerOS')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input [(ngModel)]="server.os" id="os" name="os" class="form-control"> -->
+      </div>
+      <div class="form-group">
+        <label for="region">region</label>
+        <select [(ngModel)]="server.region" required id="region" name="region" class="form-control">
+          <option value="">Select Option</option>
+          <option *ngFor="let item of getEnumData('Region')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input [(ngModel)]="server.region" id="region" name="region" class="form-control"> -->
+      </div>
+      <div class="form-group">
+        <label for="instanceType">Instance Type</label>
+        
+        <select [(ngModel)]="server.instanceType" id="instanceType" name="instanceType" class="form-control">
+          <option value="">Select Option</option>
+          <option *ngFor="let item of getEnumData('InstanceType')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input [(ngModel)]="server.instanceType" id="instanceType" name="instanceType" class="form-control"> -->
+      </div>
+      <div class="form-group">
+        <label for="hostingType">hostingType</label>
+        <select [(ngModel)]="server.hostingType" required id="hostingType" name="hostingType" class="form-control">
+          <option value="">Select Option</option>
+          <option *ngFor="let item of getEnumData('HostingType')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input [(ngModel)]="server.hostingType" id="hostingType" name="hostingType" class="form-control"> -->
+      </div>
+      <div class="form-group">
+        <label for="state">state</label>
+        <select [(ngModel)]="server.state" required id="state" name="state" class="form-control">
+          <option value="">Select Option</option>
+          <option *ngFor="let item of getEnumData('State')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input > -->
+      </div>
+    <div *ngIf="server.state=='MAINTAINANCE'">
+      <div class="form-group">
+        <label for="createdBy">Maintainance Type</label>
+        <select [(ngModel)]="server.maintainanceType" id="maintainanceType" name="maintainanceType" class="form-control">
+          <option value>Select Option</option>
+          <option *ngFor="let item of getEnumData('MaintainanceType')" value="{{item}}">{{item}}</option>
+        </select>
+        <!-- <input [(ngModel)]="server.maintainanceType" id="createdBy" name="createdBy" class="form-control"> -->
+      
+      </div>
+      
+
+      <nb-card>
+        <nb-card-header>maintainanceStartDateTime</nb-card-header>
+        <nb-card-body>
+          <input nbInput
+                id="maintainanceStartDateTime" name="maintainanceStartDateTime" class="form-control"
+                 placeholder="Form Picker"
+                 [(ngModel)]="server.maintainanceStartDateTime"
+                 [nbDatepicker]="maintainanceStartDateTime">
+          <nb-datepicker #maintainanceStartDateTime></nb-datepicker>
+        </nb-card-body>
+      </nb-card>
+      <nb-card>
+        <nb-card-header>maintainanceEndDateTime</nb-card-header>
+        <nb-card-body>
+          <input nbInput
+                id="maintainanceEndDateTime" name="maintainanceEndDateTime" class="form-control"
+                 placeholder="Form Picker"
+                 [(ngModel)]="server.maintainanceEndDateTime"
+                 [nbDatepicker]="maintainanceEndDateTime">
+          <nb-datepicker #maintainanceEndDateTime></nb-datepicker>
+        </nb-card-body>
+      </nb-card>
+    </div>
+      
+    
+      
+    
+    <div class="form-group">
+      <label for="state"> Device List </label>
+      <div>
+        <span class="chip" *ngFor="let sitem of server.devices"> {{sitem.name}}-{{sitem.serialNo}}
+          <button  type="button" class="btn" (click)="removeFromList(server.devices,sitem)">X</button>
+        </span>
+      </div>
+      <select multiple [(ngModel)]="server.selectiondevices" id="devices" name="devices" class="form-control">
+        <option value="">Select Option</option>
+        <option *ngFor="let item of availableDeviceList" value="{{item.id}}">{{item.name}}-{{item.serialNo}}</option>
+      </select>
+      <button type="button"   class="btn"  (click)="addSelectedIntoDeviceList()">add</button>
+    </div>
+    <div class="form-group">
+      <label for="state"> browser List</label>
+      <div>
+        <span class="chip" *ngFor="let sitem of server.browsers"> {{sitem.name}} - {{sitem.version}}
+          <button  type="button" class="btn" (click)="removeFromList(server.browsers,sitem)">X</button>
+        </span>
+      </div>
+      <select multiple [(ngModel)]="server.selectionbrowsers" id="browsers" name="browsers" class="form-control">
+        <option value="">Select Option</option>
+        <option *ngFor="let item of availableBrowserList" value="{{item.id}}">{{item.name}}-{{item.version}}</option>
+      </select>
+      <button  type="button" class="btn" (click)="addSelectedIntoBrowserList()">add</button>
+    </div>
+     
+      
+     
+    
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+  </nb-card-body>
+</nb-card>
