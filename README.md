@@ -7,7 +7,7 @@
  
     This is a Spring Boot Service implemented with runtime as Java 1.8. Basic functionalities of this app includes CRUD operations of Server, Device, Browser, Client and other Devices. Spring Boot Security has been enabled, for Authentication and Authorization JWT token with role based access has been implemented. It has emailing mechanism implemented with which clients can be able to see the reports generated. Application uses Mongodb as primary database to store, read and write different documents.
    
-   - This link contains contract of each API’s:-[Contract of API’s](http://34.197.100.75:32174/swagger-ui.html)
+   - [Contract of API’s](http://34.197.100.75:32174/swagger-ui.html)
 
 - **InventoryManagementUI**
 
