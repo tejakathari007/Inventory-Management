@@ -48,6 +48,7 @@
     ```
   - To build all the file changes and serve it locally run
     ```bash
+    ng build
     ng serve
     ```
 **NOTE** : Property files of spring boot, environment file of Angular app needs to be updated with required credentials.
