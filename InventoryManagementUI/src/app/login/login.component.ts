@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+    this.errors = [];
     this._QyauthService.login(this.user).subscribe({
       next: logindata => {
         this.errors = ['login successfull'];
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userDetails', JSON.stringify(logindata));
         setTimeout(async () => {
           await this.router.navigate(['/pages']);
-        }, 1000);
+        }, 100);
       },
       error: err => {
         this.errors = ['please check username and password'];

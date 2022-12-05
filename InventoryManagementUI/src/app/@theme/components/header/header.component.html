@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo" href="#" (click)="navigateHome()">Qyrus Farm <span></span></a>
+    <a class="logo" href="#" (click)="navigateHome()">Device Farm <span></span></a>
   </div>
   <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
@@ -30,7 +30,7 @@
     <nb-action class="control-item" (click)="logout()" icon="fa fa-user">Logout</nb-action> -->
   </nb-actions>
   <div style="font-size: x-large;">
-   <span><i class="fa fa-user"></i>  {{user?.userName}}</span> 
+   <span style="padding-right: 12px;"><i class="fa fa-user"></i>  {{user?.userName}}</span> 
     <button class="btn btn-info" (click)="logout()"> Logout</button>
   </div>
 </div>

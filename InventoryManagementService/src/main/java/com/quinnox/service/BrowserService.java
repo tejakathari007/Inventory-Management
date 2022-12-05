@@ -1,8 +1,11 @@
 package com.quinnox.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.quinnox.model.Browser;
 import com.quinnox.model.BrowserStatus;
+import com.quinnox.model.ChartModel;
 import com.quinnox.model.Client;
 import com.quinnox.model.Device;
 import com.quinnox.model.DeviceState;
@@ -103,13 +107,13 @@ public class BrowserService {
 
 		Query query = new Query();
 		int browserCount = (int) mongoTemplate.count(query, Browser.class);
-		json.put("Overall Browser Count", browserCount);
+		json.put("BrowserCount", browserCount);
 
 		return json;
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONObject getAllBrowsersCountByStatus() throws Exception {
+	public JSONObject getAllBrowsersCountByState() throws Exception {
 		JSONObject json = new JSONObject();
 
 		Query browserAv = new Query();
@@ -124,11 +128,38 @@ public class BrowserService {
 		browserNA.addCriteria(Criteria.where("browserStatus").is(BrowserStatus.NA));
 		int overallNA = (int) mongoOperations.count(browserNA, Browser.class);
 
-		JSONObject overallBrowserByState = new JSONObject();
-		overallBrowserByState.put("Available", overallAv);
-		overallBrowserByState.put("Occupied", overallOcc);
-		overallBrowserByState.put("NA", overallNA);
-		json.put("Browser Count By Status", overallBrowserByState);
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Available", overallAv);
+		ChartModel del = new ChartModel("Occupied", overallOcc);
+		ChartModel na = new ChartModel("NA", overallNA);
+
+		array.add(proc);
+		array.add(del);
+		array.add(na);
+		json.put("data", array);
+		return json;
+	}
+
+	public JSONObject getAllBrowsersCountByNameAndVersion() {
+		Map<String, Integer> map = new HashMap<>();
+		JSONObject json = new JSONObject();
+		List<Browser> s = browserRepository.findAll();
+		s.forEach((each) -> {
+			String makerModel = each.getName() + each.getVersion();
+			if (map.containsKey(makerModel)) {
+				map.put(makerModel, map.get(makerModel) + 1);
+			} else {
+				map.put(makerModel, 1);
+			}
+		});
+		JSONArray array = new JSONArray();
+
+		map.forEach((k, v) -> {
+			ChartModel proc = new ChartModel(k, v);
+			array.add(proc);
+		});
+		json.put("data", array);
+
 		return json;
 	}
 

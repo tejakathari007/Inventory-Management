@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.quinnox.model.Device;
 import com.quinnox.model.DeviceSuggestions;
@@ -98,30 +97,30 @@ public class DeviceController {
 		return json.toString();
 
 	}
-	
+
 	@GetMapping("/getAllDevicesCount")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
 	public org.json.simple.JSONObject getAllDevicesCount() throws Exception {
 		return deviceService.getAllDevicesCount();
 	}
-	
+
 	@GetMapping("/getAllDevicesCountByState")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
 	public org.json.simple.JSONObject getAllDevicesCountByState() throws Exception {
 		return deviceService.getAllDevicesCountByState();
 	}
-	
+
 	@GetMapping("/getAllDevicesCountByOS")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
 	public org.json.simple.JSONObject getAllDevicesCountByOS() throws Exception {
 		return deviceService.getAllDevicesCountByOS();
 	}
-	
-	@GetMapping("/getAllDevicesCountByDate")
-	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
-	public org.json.simple.JSONObject getAllDevicesCountByDate() throws Exception {
-		return deviceService.getAllDevicesCountByDate();
-	}
+
+//	@GetMapping("/getAllDevicesCountByDate")
+//	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+//	public org.json.simple.JSONObject getAllDevicesCountByDate() throws Exception {
+//		return deviceService.getAllDevicesCountByDate();
+//	}
 
 	@GetMapping("/getAllDevicesCountByMakerAndModel")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })

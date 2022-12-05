@@ -7,7 +7,9 @@ import { environment } from '../../../environments/environment';
 
 const headers = new HttpHeaders().set('Accept', 'application/json');
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientService {
   clientList: Client[] = [];
   oclientList: Client[] = [];
@@ -40,6 +42,12 @@ export class ClientService {
     });
   }
 
+  auditData(): Observable<any> {
+
+    return this.http.get<any>(this.api+'/audits', {headers});
+  }
+
+
   find(filter: ClientFilter): Observable<Client[]> {
 
     return this.http.get<Client[]>(this.api+'/getAllClients', {headers});
@@ -61,6 +69,16 @@ export class ClientService {
     if (entity.id) {
       url = `${this.api}` + '/deleteClient/' + `${entity.id.toString()}`;
       return this.http.delete<Client>(url, {headers});
+    }
+    return EMPTY;
+  }
+  sendMail(id: string):  Observable<any> {
+    let obj = {
+      "clientId" : id
+    };
+    if (id) {
+      let url = `${this.api}` + '/triggerMail' ;
+      return this.http.post<any>(url,obj, {headers});
     }
     return EMPTY;
   }

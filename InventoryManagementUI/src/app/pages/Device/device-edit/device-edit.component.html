@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>Device Detail</nb-card-header>
+  <nb-card-header>Device Details</nb-card-header>
   <nb-card-body>
     <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
     <form *ngIf="device" #editForm="ngForm" (ngSubmit)="save()">
@@ -21,14 +21,14 @@
       </div>
     
       <div class="form-group">
-        <label for="ipAddress">IP Address</label>
+        <label for="ipAddress">IPAddress</label>
         <input [(ngModel)]="device.ipAddress" id="ipAddress" name="ipAddress" class="form-control">
       </div>
     
      
     
       <div class="form-group">
-        <label for="serialNo">Serial No</label>
+        <label for="serialNo">SerialNo</label>
         <input [(ngModel)]="device.serialNo" required id="serialNo" name="serialNo" class="form-control">
       </div>
     
@@ -64,7 +64,7 @@
     
       <div *ngIf="device.state=='MAINTAINANCE'">
         <div class="form-group">
-          <label for="createdBy">Maintainance Type</label>
+          <label for="createdBy">MaintainanceType</label>
           <select [(ngModel)]="device.maintainanceType" id="maintainanceType" name="maintainanceType" class="form-control">
             <option value>Select Option</option>
             <option *ngFor="let item of getEnumData('MaintainanceType')" value="{{item}}">{{item}}</option>
@@ -74,7 +74,7 @@
         
   
         <nb-card>
-          <nb-card-header>maintainanceStartDateTime</nb-card-header>
+          <nb-card-header>MaintainanceStartDateTime</nb-card-header>
           <nb-card-body>
             <input nbInput
                   id="maintainanceStartDateTime" name="maintainanceStartDateTime" class="form-control"
@@ -85,7 +85,7 @@
           </nb-card-body>
         </nb-card>
         <nb-card>
-          <nb-card-header>maintainanceEndDateTime</nb-card-header>
+          <nb-card-header>MaintainanceEndDateTime</nb-card-header>
           <nb-card-body>
             <input nbInput
                   id="maintainanceEndDateTime" name="maintainanceEndDateTime" class="form-control"
@@ -96,8 +96,24 @@
           </nb-card-body>
         </nb-card>
       </div>
-    
-      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+      <div class="form-group">
+        <label for="Client">Client</label>
+        
+        <select [compareWith]="compare" [(ngModel)]="device.client" required id="client" name="client" class="form-control">
+          <option value>Select client</option>
+          <option *ngFor="let item of getclientList()" [ngValue]="item" >{{item.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="OS">Server</label>
+        
+        <select [compareWith]="compareserver" [(ngModel)]="device.server" required id="server" name="server" class="form-control">
+          <option value>Select server</option>
+          <option *ngFor="let item of getseverList()" [ngValue]="item">{{item.name}}</option>
+        </select>
+        <!-- <input [(ngModel)]="device.OS" id="os" name="OS" class="form-control"> -->
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>&nbsp;
       <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
     </form>
     </nb-card-body>

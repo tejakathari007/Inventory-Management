@@ -1,36 +1,58 @@
 <nb-card>
-  <nb-card-header>
-    Device List
+  <nb-card-header style="position: relative;">
+    
+    <div class="row">
+      <div class="col-1">
+        Devices
+      </div>
+      <div class="col-8 ">
+      
+        <input
+        (keyup)="search()" 
+          [(ngModel)]="filter.name"
+          id="name"
+          name="name"
+          class="form-control"
+        />
+        <i class="fa fa-search" style="
+        position: absolute;
+        right: 24px;
+        top: 12px;
+    "></i>
+    <button style="    position: absolute;
+    right: -28px;
+    top: 0px;" [routerLink]="['../devices', 'new']" class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+    </button>&nbsp;
+    <button  style="    position: absolute;
+    right: -78px;
+    top: 0px;" type="submit" class="btn btn-primary"  (click)="getQr()">
+      <i class="fa fa-qrcode"></i>
+    </button>
+      </div>
+    </div>  
+    
+    <div class="switchiconblock">
+      
+      <i class="fas fa-list switchicon" [ngClass]="{'Activeicon': viewType=='listview'}" (click)="viewType='listview'"></i>
+      <i class="fas fa-th switchicon"   [ngClass]="{'Activeicon': viewType=='cardview'}" (click)="viewType='cardview'"></i>
+      
+    </div>
   </nb-card-header>
 
   <nb-card-body>
-    <form #f="ngForm">
-      
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input [(ngModel)]="filter.name" id="name" name="name" class="form-control">
-      </div>
-      
-      <!-- <button (click)="search()" [disabled]="!f?.valid" class="btn btn-primary">Search</button> -->
-      <a [routerLink]="['../devices', 'new' ]" class="btn btn-default">New</a>
-    </form>
+    
     <div class="card" *ngIf="deviceList.length > 0">
       <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
-
-      <div>
-        <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
-        <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
-      </div>
       <div class="table-responsive">
         <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
           <thead>
             <tr>
-              <th class="border-top-0" scope="col">Sr no</th>
               <th class="border-top-0" scope="col">Name</th>
               <th class="border-top-0" scope="col">Maker</th>
               <th class="border-top-0" scope="col">Model</th>
-              <th class="border-top-0" scope="col">IP Address</th>
-              <th class="border-top-0" scope="col">Serial No</th>         
+              <th class="border-top-0" scope="col">IPAddress</th>
+              <th class="border-top-0" scope="col">SerialNo</th>         
               <th class="border-top-0" scope="col">OS</th>
               <th class="border-top-0" scope="col">State</th>
               <th class="border-top-0" scope="col">Status</th>
@@ -41,7 +63,6 @@
           <tbody>
             <tr *ngFor="let item of deviceList" [class.active]="item === selectedDevice">
             
-              <td>1</td>
               <td>{{item.name}}</td>
               <td>{{item.maker}}</td>
               <td>{{item.model}}</td>
@@ -52,8 +73,11 @@
               <td>{{item.status}}</td>
               
               <td style="white-space: nowrap">
-                <a [routerLink]="['../devices', item.id ]" class="btn btn-info">Edit</a>&nbsp;
-                <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+                <button [routerLink]="['../devices', item.id]" class="btn btn-primary">
+                  <i class="fa fa-pen" ></i>
+                </button>
+                &nbsp;
+                <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger"> <i class="fa fa-trash" ></i></button>
               </td>
             </tr>
           </tbody>
@@ -75,8 +99,13 @@
                <div> <span class="lablesinner">state :   </span> {{ item.state }}    </div> 
                <div> <span class="lablesinner">status :          </span> {{ item.status }}           </div>        
                 
-               <a [routerLink]="['../devices', item.id ]" class="btn btn-info">Edit</a>&nbsp;
-               <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+               <button [routerLink]="['../devices', item.id]" class="btn btn-primary">
+                <i class="fa fa-pen" ></i>
+              </button>
+              &nbsp;
+                             <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                              <i class="fa fa-trash" ></i>
+                             </button>
                
                   </nb-card-body>
                   </nb-card>

@@ -1,6 +1,6 @@
 package com.quinnox.interceptors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,9 @@ public class AuditLogInterceptor implements HandlerInterceptor {
 		final String queryString = HttpRequestResponseUtils.getPageQueryString();
 		final String userAgent = HttpRequestResponseUtils.getUserAgent();
 		final String requestMethod = HttpRequestResponseUtils.getRequestMethod();
-		final LocalDateTime timestamp = LocalDateTime.now();
+//		final LocalDateTime timestamp = LocalDateTime.now();
+		
+//		LocalDateTime
 
 		Visitor visitor = new Visitor();
 		User user = HttpRequestResponseUtils.getLoggedInUser();
@@ -46,7 +48,7 @@ public class AuditLogInterceptor implements HandlerInterceptor {
 		visitor.setQueryString(queryString);
 		visitor.setRefererPage(refererPage);
 		visitor.setUserAgent(userAgent);
-		visitor.setLoggedTime(timestamp);
+		visitor.setLoggedTime(System.currentTimeMillis());
 //		visitor.setUniqueVisit(true);
 
 		visitorService.saveVisitorInfo(visitor);

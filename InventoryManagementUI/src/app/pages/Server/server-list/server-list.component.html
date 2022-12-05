@@ -1,12 +1,11 @@
 <nb-card>
-  <nb-card-header> Server List </nb-card-header>
-
-  <nb-card-body>
-    <form #f="ngForm">
-      <div class="row">
+  <nb-card-header style="position: relative;">
+    <div class="row">
+      <div class="col-1">
+        Servers
+      </div>
+      <div class="col-8 ">
       
-      <div class="form-group col-6 ">
-        <label for="name">Name:</label>
         <input
         (keyup)="search()" 
           [(ngModel)]="filter.name"
@@ -14,35 +13,46 @@
           name="name"
           class="form-control"
         />
+        <i class="fa fa-search" style="
+        position: absolute;
+        right: 24px;
+        top: 12px;
+    "></i>
+    <button style="    position: absolute;
+    right: -28px;
+    top: 0px;" [routerLink]="['../servers', 'new']" class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+    </button>
       </div>
-      <a [routerLink]="['../servers', 'new']" class="btn btn-default">New</a>
+    </div>  
+    
+    <div class="switchiconblock">
+      
+      <i class="fas fa-list switchicon" [ngClass]="{'Activeicon': viewType=='listview'}" (click)="viewType='listview'"></i>
+      <i class="fas fa-th switchicon"   [ngClass]="{'Activeicon': viewType=='cardview'}" (click)="viewType='cardview'"></i>
+      
     </div>
-    </form>
+  </nb-card-header>
 
+  <nb-card-body>
+    
     <div *ngIf="feedback.message" class="alert alert-{{ feedback.type }}">
       {{ feedback.message }}
     </div>
     <div class="table-responsive" *ngIf="serverList.length > 0">
-      <div>
-        <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
-        <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
-      </div>
+      
       <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
         <thead>
           <tr>
             <!-- <th class="border-top-0" scope="col">Id</th> -->
             <th class="border-top-0" scope="col">Name</th>
-            <th class="border-top-0" scope="col">Serial No</th>
-            <th class="border-top-0" scope="col">Instance Type</th>
-            <th class="border-top-0" scope="col">state</th>
-            <th class="border-top-0" scope="col">region</th>
-            <th class="border-top-0" scope="col">hostingType</th>
-            <th class="border-top-0" scope="col">ipaddress</th>
-            <th class="border-top-0" scope="col">os</th>
-            <!-- <th class="border-top-0" scope="col">Created By</th>
-            <th class="border-top-0" scope="col">Created On</th>
-            <th class="border-top-0" scope="col">Modified By</th>
-            <th class="border-top-0" scope="col">Modified On</th> -->
+            <th class="border-top-0" scope="col">SerialNo</th>
+            <th class="border-top-0" scope="col">InstanceType</th>
+            <th class="border-top-0" scope="col">State</th>
+            <th class="border-top-0" scope="col">Region</th>
+            <th class="border-top-0" scope="col">HostingType</th>
+            <th class="border-top-0" scope="col">IPAddress</th>
+            <th class="border-top-0" scope="col">OS</th>
             <th class="border-top-0" scope="col" style="width: 120px"></th>
           </tr>
         </thead>
@@ -58,21 +68,18 @@
             <td>{{ item.hostingType }}</td>
             <td>{{ item.ipAddress }}</td>
             <td>{{ item.os }}</td>
-            <!-- <td>{{ item.createdBy }}</td>
-            <td>{{ item.createdDate }}</td>
-            <td>{{ item.lastModifiedBy }}</td>
-            <td>{{ item.lastModifiedDate }}</td> -->
             <td style="white-space: nowrap">
-              <a
-                [routerLink]="['../servers', item.id]"
-                class="btn btn-secondary"
-                >Edit</a
-              >&nbsp;
-              <button (click)="deplucated(item)" class="btn btn-secondary">
-                Duplicate
+              
+              <button [routerLink]="['../servers', item.id]" class="btn btn-primary">
+                <i class="fa fa-pen" ></i>
+              </button>
+              
+                &nbsp;
+              <button (click)="deplucated(item)" class="btn btn-info">
+                <i class="fa fa-clone" ></i>
               </button>&nbsp;
               <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
-                Delete
+                <i class="fa fa-trash" ></i>
               </button>
             </td>
           </tr>
@@ -87,24 +94,22 @@
               </nb-card-header>
              
               <nb-card-body>             
-             <div> <span class="lablesinner">serialNo : </span> {{ item.serialNo }}        </div>
-             <div> <span class="lablesinner">instanceType :</span> {{ item.instanceType }} </div>
-             <div> <span class="lablesinner">state :       </span> {{ item.state }}        </div>     
-             <div> <span class="lablesinner">region :      </span> {{ item.region }}       </div>    
-             <div> <span class="lablesinner">hostingType : </span> {{ item.hostingType }} </div>
-             <div> <span class="lablesinner">ipAddress :   </span> {{ item.ipAddress }}    </div> 
-             <div> <span class="lablesinner">os :          </span> {{ item.os }}           </div>        
+             <div> <span class="lablesinner">SerialNo : </span> {{ item.serialNo }}        </div>
+             <div> <span class="lablesinner">InstanceType :</span> {{ item.instanceType }} </div>
+             <div> <span class="lablesinner">State :       </span> {{ item.state }}        </div>     
+             <div> <span class="lablesinner">Region :      </span> {{ item.region }}       </div>    
+             <div> <span class="lablesinner">HostingType : </span> {{ item.hostingType }} </div>
+             <div> <span class="lablesinner">IPAddress :   </span> {{ item.ipAddress }}    </div> 
+             <div> <span class="lablesinner">OS :          </span> {{ item.os }}           </div>        
               
-             <a
-                [routerLink]="['../servers', item.id]"
-                class="btn btn-secondary"
-                >Edit</a
-              >&nbsp;
-              <button (click)="deplucated(item)" class="btn btn-secondary">
-                Duplicate
+             <button [routerLink]="['../servers', item.id]" class="btn btn-primary">
+              <i class="fa fa-pen" ></i>
+            </button>&nbsp;
+              <button (click)="deplucated(item)" class="btn btn-info">
+                <i class="fa fa-clone" ></i>
               </button>&nbsp;
               <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
-                Delete
+                <i class="fa fa-trash" ></i>
               </button>
              
                 </nb-card-body>

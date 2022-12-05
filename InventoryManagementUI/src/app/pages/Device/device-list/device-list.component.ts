@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DeviceFilter } from '../device-filter';
 import { DeviceService } from '../device.service';
 import { Device } from '../device';
+import { QrreadComponent } from '../qrread/qrread.component';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'app-device',
@@ -17,11 +19,12 @@ export class DeviceListComponent implements OnInit {
     return this.deviceService.deviceList;
   }
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceService: DeviceService,
+    private dialogService: NbDialogService) {
   }
 
   ngOnInit() {
-    this.search();
+    this.load();
   }
   checkAccess() {
     const userData = JSON.parse(localStorage.getItem('userDetails'));
@@ -32,22 +35,28 @@ export class DeviceListComponent implements OnInit {
       return false;
     }
   }
-
-  search(): void {
+  load(): void {
     this.deviceService.load(this.filter);
+  }
+  search(): void {
+    this.deviceService.searchfilter(this.filter);
   }
 
   select(selected: Device): void {
     this.selectedDevice = selected;
   }
+  getQr(){
 
+    this.dialogService.open(QrreadComponent);
+    
+  }
   delete(device: Device): void {
     if (confirm('Are you sure?')) {
       this.deviceService.delete(device).subscribe({
         next: () => {
           this.feedback = {type: 'success', message: 'Delete was successful!'};
           setTimeout(() => {
-            this.search();
+            this.load();
           }, 1000);
         },
         error: err => {

@@ -1,0 +1,28 @@
+<nb-accordion class="blocks">
+    <nb-accordion-item #item1 collapsed="false">
+      <nb-accordion-item-header> Client </nb-accordion-item-header>
+      <nb-accordion-item-body>
+        <div class="row">
+            
+              <div class="col-xxxl-12 col-md-12">
+                  <div echarts [options]="treeoptionsclient" class="echart"></div>
+              </div>
+        </div>
+      </nb-accordion-item-body>
+    </nb-accordion-item>
+  </nb-accordion>
+
+  <nb-accordion class="blocks">
+    <nb-accordion-item #item2>
+      <nb-accordion-item-header> Server </nb-accordion-item-header>
+      <nb-accordion-item-body>
+        <div class="row">
+            
+              <div class="col-xxxl-12 col-md-12">
+                  <div echarts [options]="treeoptionsserver" class="echart"></div>
+              </div>
+        </div>
+      </nb-accordion-item-body>
+    </nb-accordion-item>
+  </nb-accordion>
+  

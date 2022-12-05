@@ -20,7 +20,6 @@ import com.quinnox.model.User;
 
 import io.jsonwebtoken.Claims;
 
-
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 	@Autowired

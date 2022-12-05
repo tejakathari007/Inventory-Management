@@ -1,0 +1,34 @@
+{ 
+    "title": "Others",
+    "entity": "Others",
+    "api": {
+      "url": "http://www.angular.at/api/OtherDevices"
+    },
+    "filter": [
+      "name"
+    ],
+    "fields": [
+      {
+        "name": "id",
+        "label": "Id",
+        "isId": true,
+        "readonly": true,
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "label": "Name"
+      },
+      {
+        "name": "uniqueId",
+        "type": "string",
+        "label": "UniqueId"
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "label": "Type"
+      }
+    ]
+}

@@ -1,7 +1,5 @@
 package com.quinnox.model;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,7 +25,7 @@ public class Visitor {
 	private String queryString;
 	private String refererPage;
 	private String userAgent;
-	private LocalDateTime loggedTime;
+	private Long loggedTime;
 //	private boolean uniqueVisit;
 
 }

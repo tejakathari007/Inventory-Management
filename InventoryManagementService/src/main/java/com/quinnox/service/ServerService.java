@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.quinnox.model.Browser;
 import com.quinnox.model.BrowserStatus;
+import com.quinnox.model.ChartModel;
 import com.quinnox.model.Device;
 import com.quinnox.model.DeviceState;
 import com.quinnox.model.DeviceStatus;
@@ -195,11 +197,17 @@ public class ServerService {
 		serverLon.addCriteria(Criteria.where("region").is(Region.UK_LON));
 		int overallLon = (int) mongoOperations.count(serverLon, Server.class);
 
-		JSONObject overallServerPerRegion = new JSONObject();
-		overallServerPerRegion.put("IND_BLR", overallBlr);
-		overallServerPerRegion.put("USA_CHI", overallChg);
-		overallServerPerRegion.put("UK_LON", overallLon);
-		json.put("Server Count Per Region", overallServerPerRegion);
+		//
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("IND_BLR", overallBlr);
+		ChartModel del = new ChartModel("USA_CHI", overallChg);
+		ChartModel pr = new ChartModel("UK_LON", overallLon);
+		array.add(proc);
+		array.add(del);
+		array.add(pr);
+		json.put("data", array);
+		//
+
 		return json;
 	}
 
@@ -230,15 +238,21 @@ public class ServerService {
 		Query serverPhOut = new Query();
 		serverPhOut.addCriteria(Criteria.where("state").is(State.PHASEDOUT));
 		int overallPhOut = (int) mongoOperations.count(serverPhOut, Server.class);
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Procurement", overallProc);
+		ChartModel del = new ChartModel("Delivered", overallDelv);
+		ChartModel pr = new ChartModel("Preparation", overallPrep);
+		ChartModel li = new ChartModel("Live", overallLive);
+		ChartModel mai = new ChartModel("Maintenance", overallMntn);
+		ChartModel ph = new ChartModel("PhasedOut", overallPhOut);
+		array.add(proc);
+		array.add(del);
+		array.add(pr);
+		array.add(li);
+		array.add(mai);
+		array.add(ph);
 
-		JSONObject overallServerByState = new JSONObject();
-		overallServerByState.put("Procurement", overallProc);
-		overallServerByState.put("Delivered", overallDelv);
-		overallServerByState.put("Preparation", overallPrep);
-		overallServerByState.put("Live", overallLive);
-		overallServerByState.put("Maintenance", overallMntn);
-		overallServerByState.put("PhasedOut", overallPhOut);
-		json.put("Server Count By State", overallServerByState);
+		json.put("data", array);
 		return json;
 	}
 
@@ -254,10 +268,15 @@ public class ServerService {
 		serverDedicated.addCriteria(Criteria.where("hostingType").is(HostingType.DEDICATED));
 		int overallDedicated = (int) mongoOperations.count(serverDedicated, Server.class);
 
-		JSONObject overallServerByHostingType = new JSONObject();
-		overallServerByHostingType.put("Shared", overallShared);
-		overallServerByHostingType.put("Dedicated", overallDedicated);
-		json.put("Server Count By Hosting Type", overallServerByHostingType);
+		//
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Shared", overallShared);
+		ChartModel del = new ChartModel("Dedicated", overallDedicated);
+		array.add(proc);
+		array.add(del);
+		json.put("data", array);
+		//
+
 		return json;
 	}
 
@@ -266,17 +285,19 @@ public class ServerService {
 		JSONObject json = new JSONObject();
 
 		Query serverLinux = new Query();
-		serverLinux.addCriteria(Criteria.where("OS").is(ServerOS.LINUX));
+		serverLinux.addCriteria(Criteria.where("os").is(ServerOS.LINUX));
 		int overallLinux = (int) mongoOperations.count(serverLinux, Server.class);
 
 		Query serverMac = new Query();
-		serverMac.addCriteria(Criteria.where("OS").is(ServerOS.MAC));
+		serverMac.addCriteria(Criteria.where("os").is(ServerOS.MAC));
 		int overallMac = (int) mongoOperations.count(serverMac, Server.class);
 
-		JSONObject overallServerByOS = new JSONObject();
-		overallServerByOS.put("Linux", overallLinux);
-		overallServerByOS.put("MAC", overallMac);
-		json.put("Server Count By OS", overallServerByOS);
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Linux", overallLinux);
+		ChartModel del = new ChartModel("MAC", overallMac);
+		array.add(proc);
+		array.add(del);
+		json.put("data", array);
 		return json;
 	}
 
@@ -287,7 +308,7 @@ public class ServerService {
 		Query query = new Query();
 
 		int serverCount = (int) mongoTemplate.count(query, Server.class);
-		json.put("Overall Server Count", serverCount);
+		json.put("Count", serverCount);
 		return json;
 	}
 
@@ -304,7 +325,7 @@ public class ServerService {
 		Query query = new Query();
 		int serverCount = (int) mongoTemplate.count(query, Server.class);
 		int avg = deviceCount / serverCount;
-		json.put("Average Device Count Per Server", avg);
+		json.put("AverageDeviceCount", avg);
 
 		return json;
 	}
@@ -322,31 +343,31 @@ public class ServerService {
 		Query query = new Query();
 		int serverCount = (int) mongoTemplate.count(query, Server.class);
 		int avg = browserCount / serverCount;
-		json.put("Avg Browser Count Per Server", avg);
+		json.put("AverageBrowserCount", avg);
 
 		return json;
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public JSONObject getAllServersCountByDate() {
-		Map<Date, Integer> map = new HashMap<>();
-		JSONObject json = new JSONObject();
-		List<Server> s = serverRepository.findAll();
-		s.forEach((each) -> {
-			Date createdDate = each.getCreatedDate();
-			createdDate.setHours(0);
-			createdDate.setMinutes(0);
-			createdDate.setSeconds(0);
-			if (map.containsKey(createdDate)) {
-				map.put(createdDate, map.get(createdDate) + 1);
-			} else {
-				map.put(createdDate, 1);
-			}
-
-			json.put("Server Count By createdDate", map);
-
-		});
-		return json;
-	}
+//	@SuppressWarnings({ "unchecked", "deprecation" })
+//	public JSONObject getAllServersCountByDate() {
+//		Map<Date, Integer> map = new HashMap<>();
+//		JSONObject json = new JSONObject();
+//		List<Server> s = serverRepository.findAll();
+//		s.forEach((each) -> {
+//			Date createdDate = each.getCreatedDate();
+//			createdDate.setHours(0);
+//			createdDate.setMinutes(0);
+//			createdDate.setSeconds(0);
+//			if (map.containsKey(createdDate)) {
+//				map.put(createdDate, map.get(createdDate) + 1);
+//			} else {
+//				map.put(createdDate, 1);
+//			}
+//
+//			json.put("Server Count By createdDate", map);
+//
+//		});
+//		return json;
+//	}
 
 }

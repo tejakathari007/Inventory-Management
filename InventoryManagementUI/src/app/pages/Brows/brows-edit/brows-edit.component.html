@@ -1,7 +1,7 @@
 
 
 <nb-card>
-  <nb-card-header>Browser Detail</nb-card-header>
+  <nb-card-header>Browser Details</nb-card-header>
   <nb-card-body>
     <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
     <form *ngIf="brows" #editForm="ngForm" (ngSubmit)="save()">
@@ -17,9 +17,24 @@
         <label for="version">Version</label>
         <input [(ngModel)]="brows.version" required id="version" name="version" class="form-control">
       </div>
+      <div class="form-group">
+        <label for="Client">Client</label>
+        
+        <select [compareWith]="compare" [(ngModel)]="brows.client" required id="client" name="client" class="form-control">
+          <option value>Select client</option>
+          <option *ngFor="let item of getclientList()" [ngValue]="item" >{{item.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="OS">Server</label>
+        
+        <select [compareWith]="compareserver" [(ngModel)]="brows.server" required id="server" name="server" class="form-control">
+          <option value>Select server</option>
+          <option *ngFor="let item of getseverList()" [ngValue]="item">{{item.name}}</option>
+        </select>
+      </div>
     
-    
-      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>&nbsp;
       <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
     </form>
   </nb-card-body>

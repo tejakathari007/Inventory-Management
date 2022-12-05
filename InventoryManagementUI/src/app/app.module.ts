@@ -12,6 +12,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
+  NbAccordionModule,
   NbDatepickerModule,
   NbDialogModule,
   NbMenuModule,
@@ -22,6 +23,8 @@ import {
 
 import { TokenInterceptorService } from './token-interceptor.service';
 import { QyauthModule } from './qyauth/qyauth.module';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { QRCodeModule } from 'angularx-qrcode';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -37,7 +40,10 @@ import { QyauthModule } from './qyauth/qyauth.module';
     NbToastrModule.forRoot(),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
-    QyauthModule
+    QyauthModule,
+    NgxPaginationModule,
+    QRCodeModule,
+    NbAccordionModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }

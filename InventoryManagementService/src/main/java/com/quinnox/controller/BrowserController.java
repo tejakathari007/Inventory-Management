@@ -80,10 +80,17 @@ public class BrowserController {
 		return browserService.getAllBrowsersCount();
 	}
 	
-	@GetMapping("/getAllBrowsersCountByStatus")
+	@GetMapping("/getAllBrowsersCountByState")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
 	public JSONObject getAllBrowsersCountByStatus() throws Exception {
-		return browserService.getAllBrowsersCountByStatus();
+		return browserService.getAllBrowsersCountByState();
+	}
+	
+
+	@GetMapping("/getAllBrowsersCountByNameAndVersion")
+	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+	public org.json.simple.JSONObject getAllBrowsersCountByNameAndVersion() throws Exception {
+		return browserService.getAllBrowsersCountByNameAndVersion();
 	}
 
 

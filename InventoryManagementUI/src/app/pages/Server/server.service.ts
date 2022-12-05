@@ -7,7 +7,9 @@ import { environment } from '../../../environments/environment';
 
 const headers = new HttpHeaders().set('Accept', 'application/json');
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ServerService {
   serverList: Server[] = [];
   oserverList: Server[] = [];

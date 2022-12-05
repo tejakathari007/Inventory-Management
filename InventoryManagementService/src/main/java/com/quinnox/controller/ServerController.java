@@ -93,11 +93,11 @@ public class ServerController {
 		return serverService.getAllServersCount();
 	}
 
-	@GetMapping("/getAllServersCountByDate")
-	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
-	public JSONObject getAllServersCountByDate() throws Exception {
-		return serverService.getAllServersCountByDate();
-	}
+//	@GetMapping("/getAllServersCountByDate")
+//	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+//	public JSONObject getAllServersCountByDate() throws Exception {
+//		return serverService.getAllServersCountByDate();
+//	}
 
 	@GetMapping("/getAvgDeviceCountPerServer")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })

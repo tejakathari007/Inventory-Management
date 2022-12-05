@@ -20,12 +20,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
-    if(token){
-      this.router.navigate(['/pages']);
-    } 
-    else{
+    if(!token){
       this.router.navigate(['/auth']);
-    }
+    } 
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
   }

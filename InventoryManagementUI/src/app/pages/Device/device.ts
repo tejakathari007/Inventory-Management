@@ -6,7 +6,7 @@ export class Device {
   IPAddress!: string;
   deviceType!: string;
   serialNo!: string;
-  OS!: string;
+  os!: string;
   state!: string;
   status!: string;
   createdBy!: string;

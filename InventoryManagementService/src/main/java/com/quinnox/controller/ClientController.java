@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,5 +66,23 @@ public class ClientController {
 	@RolesAllowed("ROLE_ADMIN")
 	public void deleteClient(@PathVariable String clientId) throws Exception{
 		clientService.deleteClient(clientId);
+	}
+	
+	@GetMapping("/getAllClientsCount")
+	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+	public JSONObject getAllClientsCount() throws Exception {
+		return clientService.getAllClientsCount();
+	}
+	
+	@GetMapping("/getBrowserCountByClient")
+	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+	public JSONObject getBrowserCountByClient() throws Exception {
+		return clientService.getBrowserCountByClient();
+	}
+	
+	@GetMapping("/getDeviceCountByClient")
+	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
+	public JSONObject getDeviceCountByClient() throws Exception {
+		return clientService.getDeviceCountByClient();
 	}
 }

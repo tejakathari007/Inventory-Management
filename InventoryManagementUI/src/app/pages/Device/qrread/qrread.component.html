@@ -1,0 +1,11 @@
+<nb-card>
+    <nb-card-header>ScanMe from your mobile</nb-card-header>
+    <nb-card-body style="width: 400px;height: 400px;text-align: center;">
+        <qrcode *ngIf="urlLink!=''" [qrdata]="urlLink" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton hero status="primary" (click)="dismiss()">Close</button>
+    </nb-card-footer>
+  </nb-card>
+  

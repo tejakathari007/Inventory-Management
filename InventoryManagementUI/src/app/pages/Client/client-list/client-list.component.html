@@ -1,30 +1,54 @@
 
 <nb-card>
-  <nb-card-header>
-    Client List
-  </nb-card-header>
 
-  <nb-card-body>
-    <form #f="ngForm">      
-      <input (keyup)="search()" [(ngModel)]="filter.name" id="name" name="name" class="form-control">
-      <a [routerLink]="['../clients', 'new' ]" class="btn btn-default">New</a>
-    </form>
-
-    <div class="card" *ngIf="clientList.length > 0">
-      <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
-      <div>
-        <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
-        <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
+  <nb-card-header style="position: relative;">
+    
+    <div class="row">
+      <div class="col-1">
+        Clients
       </div>
+      <div class="col-8 ">
+      
+        <input
+        (keyup)="search()" 
+          [(ngModel)]="filter.name"
+          id="name"
+          name="name"
+          class="form-control"
+        />
+        <i class="fa fa-search" style="
+        position: absolute;
+        right: 24px;
+        top: 12px;
+    "></i>
+    <button style="    position: absolute;
+    right: -28px;
+    top: 0px;" [routerLink]="['../clients', 'new']" class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+    </button>
+      </div>
+    </div>  
+    
+    <div class="switchiconblock">
+      
+      <i class="fas fa-list switchicon" [ngClass]="{'Activeicon': viewType=='listview'}" (click)="viewType='listview'"></i>
+      <i class="fas fa-th switchicon"   [ngClass]="{'Activeicon': viewType=='cardview'}" (click)="viewType='cardview'"></i>
+      
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+       <div class="card" *ngIf="clientList.length > 0">
+      <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+      
       <div class="table-responsive">
         <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
           <thead>
             <tr>
               <th class="border-top-0" scope="col">name</th>
               <th class="border-top-0" scope="col">Engagement</th>
-              <th class="border-top-0" scope="col">Contract Start </th>
-              <th class="border-top-0" scope="col">Contract Stop</th>
-              <th class="border-top-0" scope="col">email</th>
+              <th class="border-top-0" scope="col">ContractStart </th>
+              <th class="border-top-0" scope="col">ContractStop</th>
+              <th class="border-top-0" scope="col">Email</th>
               <th class="border-top-0" scope="col" style="width:120px"></th>
             </tr>
           </thead>
@@ -36,8 +60,17 @@
               <td>{{item.contractEndDate | date:'dd-MM-yyyy'}}</td>
               <td>{{item.email}}</td>
               <td style="white-space: nowrap">
-                <a [routerLink]="['../clients', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
-                <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+                <button [routerLink]="['../clients', item.id]" class="btn btn-primary">
+                  <i class="fa fa-pen" ></i>
+                </button>
+                &nbsp;
+                <button type="button" (click)="sendMail(item)" class="btn btn-primary">
+                  <i class="fa fa-envelope" ></i>
+                </button>
+                &nbsp;
+               <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                  <i class="fa fa-trash" ></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -51,15 +84,23 @@
                 </nb-card-header>
                
                 <nb-card-body>             
-               <div> <span class="lablesinner">engagement : </span> {{ item.engagement }}        </div>
-               <div> <span class="lablesinner">contractStartDate :</span> {{item.contractStartDate | date:'dd-MM-yyyy'}}</div>
-               <div> <span class="lablesinner">contractEndDate :       </span> {{item.contractEndDate | date:'dd-MM-yyyy'}}        </div>     
-               <div> <span class="lablesinner">email :      </span> {{ item.email }}       </div>    
+               <div> <span class="lablesinner">Engagement : </span> {{ item.engagement }}        </div>
+               <div> <span class="lablesinner">ContractStartDate :</span> {{item.contractStartDate | date:'dd-MM-yyyy'}}</div>
+               <div> <span class="lablesinner">ContractEndDate :       </span> {{item.contractEndDate | date:'dd-MM-yyyy'}}        </div>     
+               <div> <span class="lablesinner">Email :      </span> {{ item.email }}       </div>    
      
                 
-               <a [routerLink]="['../clients', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
-                <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
-  
+               <button [routerLink]="['../clients', item.id]" class="btn btn-primary">
+                <i class="fa fa-pen" ></i>
+              </button>
+              &nbsp;
+              <button type="button" (click)="sendMail(item)" class="btn btn-primary">
+                <i class="fa fa-envelope" ></i>
+              </button>
+              &nbsp;
+             <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                <i class="fa fa-trash" ></i>
+              </button>
                   </nb-card-body>
                   </nb-card>
             </div>

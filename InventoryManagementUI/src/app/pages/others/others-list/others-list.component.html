@@ -1,0 +1,98 @@
+
+<nb-card>
+
+  <nb-card-header style="position: relative;">
+    
+    <div class="row">
+      <div class="col-1">
+        Others
+      </div>
+      <div class="col-8 ">
+      
+        <input
+        (keyup)="search()" 
+          [(ngModel)]="filter.name"
+          id="name"
+          name="name"
+          class="form-control"
+        />
+        <i class="fa fa-search" style="
+        position: absolute;
+        right: 24px;
+        top: 12px;
+    "></i>
+    <button style="    position: absolute;
+    right: -28px;
+    top: 0px;" [routerLink]="['../otherses', 'new']" class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+    </button>
+      </div>
+    </div>  
+    
+    <div class="switchiconblock">
+      
+      <i class="fas fa-list switchicon" [ngClass]="{'Activeicon': viewType=='listview'}" (click)="viewType='listview'"></i>
+      <i class="fas fa-th switchicon"   [ngClass]="{'Activeicon': viewType=='cardview'}" (click)="viewType='cardview'"></i>
+      
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+<div class="card" *ngIf="othersList.length > 0">
+  <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+  <div class="table-responsive">
+    <table  *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
+      <thead>
+        <tr>
+         
+          <th class="border-top-0" scope="col">Name</th>
+          <th class="border-top-0" scope="col">UniqueId</th>
+          <th class="border-top-0" scope="col">Type</th>
+          <th class="border-top-0" scope="col" style="width:120px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of othersList" [class.active]="item === selectedOthers">
+        
+         
+          <td>{{item.name}}</td>
+          <td>{{item.uniqueId}}</td>
+          <td>{{item.type}}</td>
+          <td style="white-space: nowrap">
+            <button [routerLink]="['../otherses', item.id]" class="btn btn-primary">
+              <i class="fa fa-pen" ></i>
+            </button>
+            &nbsp;
+           <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+              <i class="fa fa-trash" ></i>
+            </button>          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="viewType!=='listview'">
+      <div class="row">
+        <div *ngFor="let item of othersList" class="col-xxxl-6 col-xxl-5 col-lg-3 col-md-3">
+          <nb-card>
+            <nb-card-header> {{item.name}}</nb-card-header>
+           
+            <nb-card-body>             
+           <div> <span class="lablesinner">UniqueId : </span> {{ item.uniqueId }}        </div>
+           <div> <span class="lablesinner">type : </span> {{ item.type }}        </div>
+          
+           <button [routerLink]="['../otherses', item.id]" class="btn btn-primary">
+            <i class="fa fa-pen" ></i>
+          </button>
+          &nbsp;
+         <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+            <i class="fa fa-trash" ></i>
+          </button>
+              </nb-card-body>
+              </nb-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+</nb-card-body>
+</nb-card>

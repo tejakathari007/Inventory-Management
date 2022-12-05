@@ -12,7 +12,6 @@ export class ClientListComponent implements OnInit {
   filter = new ClientFilter();
   selectedClient!: Client;
   feedback: any = {};
-
   get clientList(): Client[] {
     return this.clientService.clientList;
   }
@@ -27,11 +26,30 @@ export class ClientListComponent implements OnInit {
   }
   constructor(private clientService: ClientService) {
   }
-
   ngOnInit() {
     this.load();
   }
-
+  sendMail(item:Client){
+    if(item.email) {
+      this.feedback = {type: 'success', message: 'Mail Processing......'};
+      this.clientService.sendMail(item.id).subscribe({
+        next: () => {
+          this.feedback = {type: 'success', message: 'Mail has been Sent!'};
+          setTimeout(() => {
+            this.feedback = {};
+          }, 4000);
+        },
+        error: err => {
+          this.feedback = {type: 'success', message: 'Mail has been Sent!'};
+          setTimeout(() => {
+            this.feedback = {};
+          }, 4000);
+        }
+      });
+    } else {
+      alert("Mail id is missing in client");
+    }
+  }
   load(): void {
     this.clientService.load(this.filter);
   }

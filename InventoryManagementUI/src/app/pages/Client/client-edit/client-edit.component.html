@@ -1,6 +1,6 @@
 
 <nb-card>
-  <nb-card-header>Client Detail</nb-card-header>
+  <nb-card-header>Client Details</nb-card-header>
   <nb-card-body>
     <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
     <form *ngIf="client" #editForm="ngForm" (ngSubmit)="save()">
@@ -17,7 +17,7 @@
       </div>
     
       <nb-card>
-        <nb-card-header>contractStartDate</nb-card-header>
+        <nb-card-header>ContractStartDate</nb-card-header>
         <nb-card-body>
           <input nbInput
                 id="contractStartDate" name="contractStartDate" class="form-control"
@@ -33,7 +33,7 @@
       </div> -->
     
       <nb-card>
-        <nb-card-header>contractEndDate</nb-card-header>
+        <nb-card-header>ContractEndDate</nb-card-header>
         <nb-card-body>
           <input nbInput
                 id="contractEndDate" name="contractEndDate" class="form-control"
@@ -44,7 +44,7 @@
         </nb-card-body>
       </nb-card>
       <div class="form-group">
-        <label for="email">email</label>
+        <label for="email">Email</label>
         <input [(ngModel)]="client.email" id="email" name="email" class="form-control">
       </div>
       <!-- <div class="form-group">
@@ -52,7 +52,33 @@
         <input [(ngModel)]="client.stopDate" id="stopDate" name="stopDate" class="form-control">
       </div>
      -->
-      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
+     <div class="form-group">
+      <label for="state"> DeviceList </label>
+      <div>
+        <span class="chip" *ngFor="let sitem of client.devices"> {{sitem.name}}-{{sitem.serialNo}}
+          <button  type="button" class="btn" (click)="removeFromList(client.devices,sitem)">X</button>
+        </span>
+      </div>
+      <select multiple [(ngModel)]="client.selectiondevices" id="devices" name="devices" class="form-control">
+        <option value="">Select Option</option>
+        <option *ngFor="let item of availableDeviceList" value="{{item.id}}">{{item.name}}-{{item.serialNo}}</option>
+      </select>
+      <button type="button"   class="btn btn-info"  (click)="addSelectedIntoDeviceList()">add</button>
+    </div>
+    <div class="form-group">
+      <label for="state"> BrowserList</label>
+      <div>
+        <span class="chip" *ngFor="let sitem of client.browsers"> {{sitem.name}} - {{sitem.version}}
+          <button  type="button" class="btn" (click)="removeFromList(client.browsers,sitem)">X</button>
+        </span>
+      </div>
+      <select multiple [(ngModel)]="client.selectionbrowsers" id="browsers" name="browsers" class="form-control">
+        <option value="">Select Option</option>
+        <option *ngFor="let item of availableBrowserList" value="{{item.id}}">{{item.name}}-{{item.version}}</option>
+      </select>
+      <button  type="button" class="btn btn-info" (click)="addSelectedIntoBrowserList()">add</button>
+    </div>
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>&nbsp;
       <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
     </form>
   </nb-card-body>

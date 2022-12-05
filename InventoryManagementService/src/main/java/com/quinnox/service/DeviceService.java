@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.quinnox.model.ChartModel;
 import com.quinnox.model.Client;
 import com.quinnox.model.Device;
 import com.quinnox.model.DeviceList;
@@ -31,8 +33,6 @@ import com.quinnox.model.DeviceOS;
 import com.quinnox.model.DeviceState;
 import com.quinnox.model.DeviceSuggestions;
 import com.quinnox.model.Server;
-import com.quinnox.model.ServerOS;
-import com.quinnox.model.State;
 import com.quinnox.repository.ClientRepository;
 import com.quinnox.repository.DeviceRepository;
 import com.quinnox.repository.DeviceSuggestionsRepository;
@@ -93,18 +93,6 @@ public class DeviceService {
 		return deviceRepository.saveAll(devices);
 	}
 
-//	public Server updateServer(Server server, String serverId) throws Exception {
-//		Optional<Server> ser = browserRepository.findById(serverId);
-//		if (!ser.isPresent()) {
-//			throw new Exception("Server not found");
-//		} else {
-//			Server svr = ser.get();
-//			svr = browserRepository.save(server);
-//			return svr;
-//		}
-//
-//	}
-
 	public Device getDevice(String deviceId) throws Exception {
 		Optional<Device> device = deviceRepository.findById(deviceId);
 		if (device.isPresent())
@@ -163,7 +151,7 @@ public class DeviceService {
 		Query query = new Query();
 
 		int deviceCount = (int) mongoTemplate.count(query, Device.class);
-		json.put("Overall Device Count", deviceCount);
+		json.put("DeviceCount", deviceCount);
 		return json;
 	}
 
@@ -195,14 +183,22 @@ public class DeviceService {
 		devicePhOut.addCriteria(Criteria.where("state").is(DeviceState.PHASEDOUT));
 		int overallPhOut = (int) mongoOperations.count(devicePhOut, Device.class);
 
-		JSONObject overallDeviceByState = new JSONObject();
-		overallDeviceByState.put("Procurement", overallProc);
-		overallDeviceByState.put("Delivered", overallDelv);
-		overallDeviceByState.put("Preparation", overallPrep);
-		overallDeviceByState.put("Live", overallLive);
-		overallDeviceByState.put("Maintenance", overallMntn);
-		overallDeviceByState.put("PhasedOut", overallPhOut);
-		json.put("Device Count By State", overallDeviceByState);
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Procurement", overallProc);
+		ChartModel del = new ChartModel("Delivered", overallDelv);
+		ChartModel pr = new ChartModel("Preparation", overallPrep);
+		ChartModel li = new ChartModel("Live", overallLive);
+		ChartModel mai = new ChartModel("Maintenance", overallMntn);
+		ChartModel ph = new ChartModel("PhasedOut", overallPhOut);
+		array.add(proc);
+		array.add(del);
+		array.add(pr);
+		array.add(li);
+		array.add(mai);
+		array.add(ph);
+
+		json.put("data", array);
+
 		return json;
 	}
 
@@ -218,8 +214,15 @@ public class DeviceService {
 			} else {
 				map.put(makerModel, 1);
 			}
-			json.put("Device Count By maker and model", map);
 		});
+		JSONArray array = new JSONArray();
+
+		map.forEach((k, v) -> {
+			ChartModel proc = new ChartModel(k, v);
+			array.add(proc);
+		});
+		json.put("data", array);
+
 		return json;
 	}
 
@@ -228,40 +231,42 @@ public class DeviceService {
 		JSONObject json = new JSONObject();
 
 		Query deviceAndroid = new Query();
-		deviceAndroid.addCriteria(Criteria.where("OS").is(DeviceOS.ANDROID));
+		deviceAndroid.addCriteria(Criteria.where("os").is(DeviceOS.ANDROID));
 		int overallAndroid = (int) mongoOperations.count(deviceAndroid, Device.class);
 
 		Query deviceIOS = new Query();
-		deviceIOS.addCriteria(Criteria.where("OS").is(DeviceOS.IOS));
+		deviceIOS.addCriteria(Criteria.where("os").is(DeviceOS.IOS));
 		int overallIOS = (int) mongoOperations.count(deviceIOS, Device.class);
 
-		JSONObject overallDeviceByOS = new JSONObject();
-		overallDeviceByOS.put("Android", overallAndroid);
-		overallDeviceByOS.put("IOS", overallIOS);
-		json.put("Device Count By OS", overallDeviceByOS);
+		JSONArray array = new JSONArray();
+		ChartModel proc = new ChartModel("Android", overallAndroid);
+		ChartModel del = new ChartModel("IOS", overallIOS);
+		array.add(proc);
+		array.add(del);
+		json.put("data", array);
 		return json;
 	}
 
-	@SuppressWarnings("unchecked")
-	public JSONObject getAllDevicesCountByDate() {
-		Map<Date, Integer> map = new HashMap<>();
-		JSONObject json = new JSONObject();
-		List<Device> s = deviceRepository.findAll();
-		s.forEach((each) -> {
-			Date createdDate = each.getCreatedDate();
-			createdDate.setHours(0);
-			createdDate.setMinutes(0);
-			createdDate.setSeconds(0);
-			if (map.containsKey(createdDate)) {
-				map.put(createdDate, map.get(createdDate) + 1);
-			} else {
-				map.put(createdDate, 1);
-			}
-
-			json.put("Device Count By createdDate", map);
-
-		});
-		return json;
-	}
+//	@SuppressWarnings("unchecked")
+//	public JSONObject getAllDevicesCountByDate() {
+//		Map<Date, Integer> map = new HashMap<>();
+//		JSONObject json = new JSONObject();
+//		List<Device> s = deviceRepository.findAll();
+//		s.forEach((each) -> {
+//			Date createdDate = each.getCreatedDate();
+//			createdDate.setHours(0);
+//			createdDate.setMinutes(0);
+//			createdDate.setSeconds(0);
+//			if (map.containsKey(createdDate)) {
+//				map.put(createdDate, map.get(createdDate) + 1);
+//			} else {
+//				map.put(createdDate, 1);
+//			}
+//
+//			json.put("Device Count By createdDate", map);
+//
+//		});
+//		return json;
+//	}
 
 }

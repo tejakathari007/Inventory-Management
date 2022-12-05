@@ -1,7 +1,11 @@
-<nb-card>
-  <nb-card-header><h1 id="title" class="title">Qyrus Farm Login</h1></nb-card-header>
-  <nb-card-body>
 
+
+<nb-card style="margin: 4%">
+  <nb-card-header><h1 id="title" class="title">Device Farm Login</h1></nb-card-header>
+  <nb-card-body >
+    <div class="row">
+    
+    <div class="col-xxxl-12 col-xxl-12 col-lg-6 col-md-6">
     <p class="sub-title">Hello! Log in with your username.</p>
 
     <nb-alert outline="danger" *ngIf="errors.length>0" role="alert">
@@ -25,7 +29,6 @@
                id="input-name"          
                placeholder="name"
                fieldSize="large"
-               autofocus
                [status]="name.dirty ? (name.invalid  ? 'danger' : 'success') : 'basic'"
                [required]="true"
                [attr.aria-invalid]="name.invalid && name.touched ? true : null">
@@ -67,7 +70,7 @@
         </ng-container>
       </div>
     
-      <button nbButton
+      <button style="margin: 20px 0;"  nbButton
               fullWidth
               status="primary"
               size="large"
@@ -82,6 +85,10 @@
     <section class="another-action" aria-label="Register">
       Don't have an account? <a class="text-link" routerLink="../register">Register</a>
     </section>
+  </div>
+  <div class="col-xxxl-12 col-xxl-12 col-lg-6 col-md-6">
+    <img style="width: 100%;" src="../../assets/images/device.png"/>
+  </div>
+</div>
     </nb-card-body>
     </nb-card>
-

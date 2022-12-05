@@ -38,10 +38,9 @@ export const routes: Routes = [
     //     component: RegisterComponent,
     //   }
     // ],
-    
   },
-  { path: '', redirectTo: 'auth', pathMatch: 'full' },
-  { path: '**', redirectTo: 'auth' },
+  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '**', redirectTo: 'pages' },
 ];
 
 const config: ExtraOptions = {

@@ -1,40 +1,52 @@
 
 
 <nb-card>
-  <nb-card-header>
-    Browser List
-  </nb-card-header>
 
-  <nb-card-body>
-    <form #f="ngForm">
-      
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input [(ngModel)]="filter.name" id="name" name="name" class="form-control">
-      </div>
-      
-      <a [routerLink]="['../browses', 'new' ]" class="btn btn-default">New</a>
-    </form>
-    </nb-card-body>
-    </nb-card>
-   
-
-    <nb-card *ngIf="browsList.length > 0">
-      <nb-card-header>
-        <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
-      </nb-card-header>
+  <nb-card-header style="position: relative;">
     
-      <nb-card-body>
-        <div>
-          <input type="radio" name="viewType"  value="cardview" [(ngModel)]="viewType" /> Card View
-          <input type="radio" name="viewType"  value="listview" [(ngModel)]="viewType"/> List View
-        </div>
-        <div class="table-responsive">
+    <div class="row">
+      <div class="col-1">
+        Browsers
+      </div>
+      <div class="col-8 ">
+      
+        <input
+        (keyup)="search()" 
+          [(ngModel)]="filter.name"
+          id="name"
+          name="name"
+          class="form-control"
+        />
+        <i class="fa fa-search" style="
+        position: absolute;
+        right: 24px;
+        top: 12px;
+    "></i>
+    <button style="    position: absolute;
+    right: -28px;
+    top: 0px;" [routerLink]="['../browses', 'new']" class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+    </button>
+      </div>
+    </div>  
+    
+    <div class="switchiconblock">
+      
+      <i class="fas fa-list switchicon" [ngClass]="{'Activeicon': viewType=='listview'}" (click)="viewType='listview'"></i>
+      <i class="fas fa-th switchicon"   [ngClass]="{'Activeicon': viewType=='cardview'}" (click)="viewType='cardview'"></i>
+      
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+
+        <div *ngIf="browsList.length > 0" class="table-responsive">
           <table *ngIf="viewType=='listview'" class="table table-centered table-hover mb-0" id="datatable">
             <thead>
               <tr>
                 <th class="border-top-0" scope="col">Name</th>
                 <th class="border-top-0" scope="col">Version</th>
+                <th class="border-top-0" scope="col">Status</th>
                 <th class="border-top-0" scope="col" style="width:120px"></th>
               </tr>
             </thead>
@@ -42,9 +54,16 @@
               <tr *ngFor="let item of browsList" [class.active]="item === selectedBrows">
                 <td>{{item.name}}</td>
                 <td>{{item.version}}</td>
+                <td>{{item.browserStatus}}</td>
                 <td style="white-space: nowrap">
-                  <a [routerLink]="['../browses', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
-                  <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
+                  <button [routerLink]="['../browses', item.id]" class="btn btn-primary">
+                    <i class="fa fa-pen" ></i>
+                  </button>
+                  &nbsp;
+                 <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                    <i class="fa fa-trash" ></i>
+                  </button>
+                 
                 </td>
               </tr>
             </tbody>
@@ -56,20 +75,20 @@
                   <nb-card-header> {{item.name}}</nb-card-header>
                  
                   <nb-card-body>             
-                 <div> <span class="lablesinner">version : </span> {{ item.version }}        </div>
-                
-                 <a [routerLink]="['../browses', item.id ]" class="btn btn-secondary">Edit</a>&nbsp;
-                 <button [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">Delete</button>
-
+                 <div> <span class="lablesinner">Version : </span> {{ item.version }}        </div>
+                 <div> <span class="lablesinner">Status : </span> {{ item.browserStatus }}        </div>
+                 <button [routerLink]="['../browses', item.id]" class="btn btn-primary">
+                  <i class="fa fa-pen" ></i>
+                </button>
+                &nbsp;
+               <button  [disabled]="!checkAccess()" (click)="delete(item)" class="btn btn-danger">
+                  <i class="fa fa-trash" ></i>
+                </button>
                     </nb-card-body>
                     </nb-card>
               </div>
             </div>
           </div>
         </div>
-        </nb-card-body>
-        </nb-card>
-
-<div class="card" >
- 
-</div>
+    </nb-card-body>
+    </nb-card>

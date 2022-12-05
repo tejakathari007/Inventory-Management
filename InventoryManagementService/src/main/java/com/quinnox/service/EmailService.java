@@ -91,7 +91,7 @@ public class EmailService {
 		String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 		helper.setTo(mails.split(","));
 		helper.setText(html, true);
-		helper.setSubject("Testing from Spring Boot");
+		helper.setSubject("Device Farm Report");
 		helper.setFrom(fromEmail);
 		javaMailSender.send(message);
 		return "Email Sent Successfully";

@@ -6,5 +6,6 @@ import lombok.Data;
 public class EmailModel {
 
 	private String emails;
+	private String clientId;
 
 }

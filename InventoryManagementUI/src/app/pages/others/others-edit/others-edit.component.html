@@ -1,0 +1,31 @@
+
+<nb-card>
+  <nb-card-header>Others Details</nb-card-header>
+  <nb-card-body>
+    <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+    <form *ngIf="others" #editForm="ngForm" (ngSubmit)="save()">
+    
+      <input type="hidden" [(ngModel)]="others.id">
+    
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input [(ngModel)]="others.name" id="name" name="name" class="form-control">
+      </div>
+    
+      <div class="form-group">
+        <label for="uniqueId">UniqueId</label>
+        <input [(ngModel)]="others.uniqueId" id="uniqueId" name="uniqueId" class="form-control">
+      </div>
+    
+      <div class="form-group">
+        <label for="type">Type</label>
+        <input [(ngModel)]="others.type" id="type" name="type" class="form-control">
+      </div>
+    
+      <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button> &nbsp;
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+    </nb-card-body>
+    </nb-card>
+
+

@@ -48,3 +48,17 @@
     color: black;
     font-weight: bold;
 }
+.switchicon{
+color: #CCC;
+padding: 10px;
+font-size: x-large;
+cursor: pointer;
+}
+.Activeicon{
+  color: #007bff !important;
+}
+.switchiconblock{
+  position: absolute;
+  right: 8px;
+  top: 15px;
+}

@@ -1,24 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BrowsService } from '../brows.service';
 import { Brows } from '../brows';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ServerService } from '../../Server/server.service';
+import { ClientService } from '../../Client/client.service';
 
 @Component({
   selector: 'app-brows-edit',
   templateUrl: './brows-edit.component.html'
 })
-export class BrowsEditComponent implements OnInit {
+export class BrowsEditComponent implements OnInit, AfterViewInit {
 
   id!: string;
   brows!: Brows;
   feedback: any = {};
-
+  severList = [];
+  clientList = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private browsService: BrowsService) {
+    private browsService: BrowsService,
+    private clientService: ClientService,
+    private serverService: ServerService) {
   }
 
   ngOnInit() {
@@ -60,5 +65,32 @@ export class BrowsEditComponent implements OnInit {
 
   async cancel() {
     await this.router.navigate(['/pages/browser/browses']);
+  }
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    this.load();
+  }
+  getseverList(){
+    return this.serverService.serverList;
+  }
+
+  getclientList(){
+    return this.clientService.clientList;
+  }
+  load(): void {
+    const filter:any = {};
+    this.serverService.load(filter);
+    this.clientService.load(filter);
+  }
+  compare(val1, val2) {
+    if(val1 && val2)
+      return val1.id === val2.id;
+    return false;
+  }
+  compareserver(val1, val2) {
+    if(val1 && val2)
+    return val1.id === val2.id;
+  return false;
   }
 }

@@ -63,10 +63,10 @@ public class OtherDevicesController {
 		otherDevicesService.deleteOtherDevicesByID(oDeviceId);
 	}
 	
-	@GetMapping("/getAllOtherDevicesCountByName")
+	@GetMapping("/getAllOtherDevicesCountByType")
 	@RolesAllowed({ "ROLE_ADMIN", "ROLE_EDITOR" })
-	public JSONObject getAllOtherDevicesCountByName() throws Exception {
-		return otherDevicesService.getAllOtherDevicesCountByName();
+	public JSONObject getAllOtherDevicesCountByType() throws Exception {
+		return otherDevicesService.getAllOtherDevicesCountByType();
 	}
 
 }

@@ -6,9 +6,11 @@ import { DeviceListComponent } from './device-list/device-list.component';
 import { DeviceEditComponent } from './device-edit/device-edit.component';
 import { DeviceService } from './device.service';
 import { DEVICE_ROUTES } from './device.routes';
-import { NbInputModule, NbCardModule, NbButtonModule, NbActionsModule, NbUserModule, NbCheckboxModule, NbRadioModule, NbDatepickerModule, NbSelectModule, NbIconModule } from '@nebular/theme';
+import { NbInputModule, NbCardModule, NbButtonModule, NbActionsModule, NbUserModule, NbCheckboxModule, NbRadioModule, NbDatepickerModule, NbSelectModule, NbIconModule, NbAutocompleteModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
+import { QrreadComponent } from './qrread/qrread.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -26,11 +28,14 @@ import { FormsRoutingModule } from '../forms/forms-routing.module';
     NbDatepickerModule,
     FormsRoutingModule,
     NbSelectModule,
-    NbIconModule
+    NbIconModule,
+    QRCodeModule,
+    NbAutocompleteModule
   ],
   declarations: [
     DeviceListComponent,
-    DeviceEditComponent
+    DeviceEditComponent,
+    QrreadComponent
   ],
   providers: [DeviceService],
   exports: []

@@ -5,6 +5,9 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { AuditComponent } from './audit/audit.component';
+import { ArvrComponent } from './arvr/arvr.component';
+import { TreeviewComponent } from './treeview/treeview.component';
 
 const routes: Routes = [{
   path: '',
@@ -87,6 +90,23 @@ const routes: Routes = [{
       path: 'device',
       loadChildren: () => import('./Device/device.module')
         .then(m => m.DeviceModule),
+    },
+    {
+      path: 'others',
+      loadChildren: () => import('./others/others.module')
+        .then(m => m.OthersModule),
+    },
+    {
+      path: 'audit',
+      component: AuditComponent,
+    },
+    {
+      path: 'metavers',
+      component: ArvrComponent,
+    },
+    {
+      path: 'treeView',
+      component: TreeviewComponent
     },
     {
       path: '',

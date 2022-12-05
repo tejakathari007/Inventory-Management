@@ -1,8 +1,11 @@
 package com.quinnox.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -11,6 +14,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.quinnox.model.Browser;
+import com.quinnox.model.ChartModel;
 import com.quinnox.model.OtherDevices;
 import com.quinnox.repository.OtherDevicesRepository;
 
@@ -19,7 +24,7 @@ public class OtherDevicesService {
 
 	@Autowired
 	private OtherDevicesRepository otherDevicesRepository;
-	
+
 	@Autowired
 	MongoTemplate mongoTemplate;
 
@@ -61,29 +66,31 @@ public class OtherDevicesService {
 	public void deleteOtherDevicesByID(String oDeviceId) throws Exception {
 		otherDevicesRepository.deleteById(oDeviceId);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public JSONObject getAllOtherDevicesCountByName() throws Exception {
+	public JSONObject getAllOtherDevicesCountByType() throws Exception {
+
+		Map<String, Integer> map = new HashMap<>();
 		JSONObject json = new JSONObject();
+		List<OtherDevices> s = otherDevicesRepository.findAll();
+		s.forEach((each) -> {
+			String type = each.getType();
+			if (map.containsKey(type)) {
+				map.put(type, map.get(type) + 1);
+			} else {
+				map.put(type, 1);
+			}
+		});
+		JSONArray array = new JSONArray();
 
-		Query oDevicesHub = new Query();
-		oDevicesHub.addCriteria(Criteria.where("name").is("Hub"));
-		int overallHub = (int) mongoOperations.count(oDevicesHub, OtherDevices.class);
+		map.forEach((k, v) -> {
+			ChartModel proc = new ChartModel(k, v);
+			array.add(proc);
+		});
+		json.put("data", array);
 
-		Query oDevicesRouter = new Query();
-		oDevicesRouter.addCriteria(Criteria.where("name").is("Router"));
-		int overallRouter = (int) mongoOperations.count(oDevicesRouter, OtherDevices.class);
-
-		Query oDevicesSwitches = new Query();
-		oDevicesSwitches.addCriteria(Criteria.where("name").is("Switches"));
-		int overallSwitches = (int) mongoOperations.count(oDevicesSwitches, OtherDevices.class);
-
-		JSONObject overallOtherDevicesByName = new JSONObject();
-		overallOtherDevicesByName.put("Hub", overallHub);
-		overallOtherDevicesByName.put("Router", overallRouter);
-		overallOtherDevicesByName.put("Switches", overallSwitches);
-		json.put("Other Devices Count By Name", overallOtherDevicesByName);
 		return json;
+
 	}
 
 }

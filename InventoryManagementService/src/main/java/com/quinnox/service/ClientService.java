@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.quinnox.model.Browser;
 import com.quinnox.model.BrowserStatus;
+import com.quinnox.model.ChartModel;
 import com.quinnox.model.Client;
 import com.quinnox.model.ClientBrowser;
 import com.quinnox.model.ClientDevice;
 import com.quinnox.model.Device;
 import com.quinnox.model.DeviceState;
 import com.quinnox.model.DeviceStatus;
-import com.quinnox.model.Server;
-import com.quinnox.model.ServerBrowser;
-import com.quinnox.model.ServerDevice;
 import com.quinnox.repository.BrowserRepository;
 import com.quinnox.repository.ClientRepository;
 import com.quinnox.repository.DeviceRepository;
@@ -37,6 +40,12 @@ public class ClientService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	MongoTemplate mongoTemplate;
+
+	@Autowired
+	MongoOperations mongoOperations;
 
 	public List<Client> getAll() {
 		return clientRepository.findAll();
@@ -157,8 +166,75 @@ public class ClientService {
 			throw new Exception("Can't find the client");
 	}
 
+	public List<Client> getAllClient() throws Exception {
+		List<Client> clnId = clientRepository.findAll();
+		clnId.forEach((each) -> {
+			List<Device> device = deviceRepository.findByClient(each.getId());
+			List<ClientDevice> clientDevice = new ArrayList<>();
+			List<Browser> browser = browserRepository.findByClient(each.getId());
+			List<ClientBrowser> clientBrowser = new ArrayList<>();
+			device.forEach(dev -> {
+				ClientDevice cDevice = modelMapper.map(dev, ClientDevice.class);
+				clientDevice.add(cDevice);
+			});
+			browser.forEach(brw -> {
+				ClientBrowser cBrowser = modelMapper.map(brw, ClientBrowser.class);
+				clientBrowser.add(cBrowser);
+			});
+			each.setDevices(clientDevice);
+			each.setBrowsers(clientBrowser);
+		});
+
+		return clnId;
+	}
+
 	public void deleteClient(String clientId) throws Exception {
 		clientRepository.deleteById(clientId);
 	}
 
+	@SuppressWarnings("unchecked")
+	public JSONObject getAllClientsCount() throws Exception {
+
+		JSONObject json = new JSONObject();
+		Query query = new Query();
+
+		int clientCount = (int) mongoTemplate.count(query, Client.class);
+		json.put("ClientCount", clientCount);
+		return json;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getBrowserCountByClient() throws Exception {
+
+//		Map<String, Integer> map = new HashMap<>();
+		JSONObject json = new JSONObject();
+		JSONArray array = new JSONArray();
+
+		getAllClient().forEach((each) -> {
+			ChartModel proc = new ChartModel(each.getName(), each.getBrowsers().size());
+			array.add(proc);
+		});
+
+		json.put("data", array);
+
+		return json;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getDeviceCountByClient() throws Exception {
+
+//		Map<String, Integer> map = new HashMap<>();
+		JSONObject json = new JSONObject();
+		List<Client> s = clientRepository.findAll();
+		JSONArray array = new JSONArray();
+
+		getAllClient().forEach((each) -> {
+			ChartModel proc = new ChartModel(each.getName(), each.getDevices().size());
+			array.add(proc);
+		});
+
+		json.put("data", array);
+
+		return json;
+	}
 }
